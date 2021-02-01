@@ -1,1 +1,75 @@
 This is a repositoty for a todo application created using JavaScript Object Oriented approach
+
+Application Specifications:
+- Todo:  responsible for creating the `todo` objects. (ie. constructor)
+- todoList: an object that has a collection of `todo` objects.
+- todoManager: responsible for returning a set of `todo`s from a `todoList` based on certain criteria.
+
+
+1. `Todo`:
+- create a `todo` that has unique `id`
+- each todo obj has only below properties & shared methods
+  properties:
+  - id (unique)
+  - title
+  - completed  (true/ false)
+  - month 
+  - year 
+  - description  
+
+  shared methods:
+  - isWithinMonthYear(month, year)  ?
+
+- create a single `todo` with below user input: `title`, `month`, `year`, `description` 
+- user input should all be in string format
+  ex: 
+  let todoData = {
+    title: 'Buy Milk',
+    month: '1',
+    year: '2017',
+    description: 'Milk for baby',
+  };
+
+Assumption:
+  - assume Todo constuctor is available for use at global scope
+  - need to validate todoData inputs
+  - `completed` is default to `false`
+  - title: strings containing letters, spaces, numbers. At least 3 letters (space not included)
+  - description: strings containing letters, spaces, numbers. At least 3 letters (space not included); can be empty string
+  - month: string of 1 - 12, can be empty string
+  - year: string of 4 digits numbers, can be empty string
+  - unique id: positive integer starts from 1
+
+
+2. `todoList`:
+- an object that contains a collection of `todo` objects
+- methods on `todoList` returns only a copy of the collection or a subset of it. 
+-  It does not allow users or others objects to manipulate the values of todo objects directly.
+- The todoList object supports the following operations:
+  - Initializes the collection with todo objects
+  - Maintains a collection of `todo` objects ?
+  - Adds a `todo` object to the collection
+  - Deletes a `todo` object from the collection
+  - Updates existing properties of a specific todo object
+  - Returns a specified todo object based on its id property
+- todoSet is an array of `todoData`
+
+Assumption:
+  - methods on `todoList` do not mutate the `todo` object (except update)
+  - collection of `todo`s is grouped in an array
+  - assume `todos` is initialised with empty array before adding todo objects
+  - assume add, delete methods output logs after method call
+  - assume update method output error log or return an array containing updated todo
+
+3. `todoManager`:
+- The `todoManager` interfaces with the todoList object.
+- methods on `todoManager` query `todoList` to return all or subset of `todo`s as an array
+- `The `todoManager` query `todoList` object :
+  - Return all todo objects
+  - Returns a specified todo object based on its id property
+  - Return all todo objects within a given month-year combination
+  - Return all completed todo objects within a given month-year combination
+
+Assumption:
+  - Assume given month and year are valid input
+
