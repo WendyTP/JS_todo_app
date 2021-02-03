@@ -21,7 +21,9 @@ const Todo = (function() {
   function validYear(input) {
     return typeof input === 'string' && /^[0-9]{4}$/.test(input) || input === "";
   }
+
   
+  // allow only title, month, year, description keys as input (Q: how to avoid additional keys after object is created?)
   return function(todoData) {
     if (validDescription(todoData.title) && validMonth(todoData.month) && 
         validYear(todoData.year) && validDescription(todoData.description) ) {
@@ -116,16 +118,26 @@ const TodoList = (function() {
     updateTodo(inputId, todoInfo) {
       let todoForUpdating = findTodo(inputId);
       if (todoForUpdating) {
-        let idx = todos.indexOf(todoForUpdating);
+        
+        let allowedKeysForUpdating = ['title', 'month', 'year', 'description', 'completed'];
+
         Object.keys(todoInfo).forEach(key => {
-          todoForUpdating[key] = todoInfo[key];
+
+          if (allowedKeysForUpdating.includes(key)) {
+            todoForUpdating[key] = todoInfo[key];
+          } else {
+            console.log(`${key} is not included in the properties that can be updated.`);
+          }
         })
+
+        let idx = todos.indexOf(todoForUpdating);
         return this.list().slice(idx, idx + 1);
+
       } else {
         console.log("no mathcing todo found for updating");
       }
     },
-  }
+  };
 })();
 
 const TodoManager = {
@@ -320,7 +332,6 @@ todo104.title = "Don't buy veggies";
 //console.log(TodoList.ReturnFoundTodoCopy(104))  // logs todo obj id 104 Buy Veggies
 
 
-
 // 2-4. test addTodo method:
 let todoData14 = {
   title: 'Buy books',
@@ -347,14 +358,19 @@ TodoList.deleteTodo(105); // logs "Buy books is deleted "
 //TodoList.deleteTodo(200) // logs no matching todo found for deletion
 //console.log(TodoList.list()); // logs an array of 4 x objs - 101 Buy juice, 102 Buy apples, 103 Buy chocolate, 104 Buy Veggies
 
-// test for updateTodo method && todo collection can not be mutated via updateTodo return value
-console.log(TodoList.updateTodo(101, {title: "don't buy juice", completed: true })); // logs an array of 1 obj - 101 don't buy juice, completed: true
+// 2-6. test for updateTodo method && todo collection can not be mutated via updateTodo return value:
+console.log(TodoList.updateTodo(101, { title: "don't buy juice", completed: true })); // logs an array of 1 obj - 101 don't buy juice, completed: true
 let updatedTodo = TodoList.updateTodo(102, {completed: true});  // return 1 obj in array - 102 buy apples completed: true
 updatedTodo[0].title = "buy chips";
 //console.log(updatedTodo); // return 1 obj in array - 102 buy chips completed: true
 //TodoList.updateTodo(80, {title: "change window"});  // logs no matching todo found for updating
 //console.log(TodoList.list());  // logs an array of 4 x objs - 101 don't buy juice & true, 102 Buy apples & true, 103 Buy chocolate & false, 104 Buy Veggies & false
 
+// 2-6-1. test for updating non-allowed properties:
+console.log(TodoList.updateTodo(101, {extraProp: "new values", id: 1344,}));  
+// logs "extraProp is not included in the properties that can be updated."
+// logs "id is not included in the properties that can be updated." 
+// then logs an array of 1 obj - 101 don't buy juice, completed: true
 
 // 3. testing for TodoManager:
 // 3-1. test getalltodo method and  todo collection can not be mutated by getalltodo return value:
